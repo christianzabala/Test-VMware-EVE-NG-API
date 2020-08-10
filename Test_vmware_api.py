@@ -229,21 +229,24 @@ class vmware_api:
                 input("\nEnter the VM name(without .vmx) you want to power off: ")
                 + ".vmx"
             )
-            if any(vm_name in s for s in self.vm_list):
-                power_url = f"{self.api_url}/{self.get_vm_id(vm_name)}/power"
-                data = self.get(power_url)
+            for vm in self.vm_list:
+                if search(vm_name, vm, IGNORECASE) is not None:
+                    power_url = f"{self.api_url}/{self.get_vm_id(vm_name)}/power"
+                    data = self.get(power_url)
 
-                if data["power_state"] == "poweredOn":
-                    print(f"Powering Off {vm_name}:")
-                    data1 = self.put(power_url, "off")
-                    print(f'{vm_name} is now {data1["power_state"]}')
-                    self.vm_menu()
+                    if data["power_state"] == "poweredOn":
+                        print(f"Powering Off {vm_name}:")
+                        data1 = self.put(power_url, "off")
+                        print(f'{vm_name} is now {data1["power_state"]}')
+                        self.vm_menu()
 
-                elif data["power_state"] == "poweredOn":
-                    print(f"{vm_name} is already powered off, returning on the menu")
-                    self.vm_menu()
-            else:
-                print("VM name not found, Try again!")
+                    elif data["power_state"] == "poweredOn":
+                        print(
+                            f"{vm_name} is already powered off, returning on the menu"
+                        )
+                        self.vm_menu()
+                else:
+                    print("VM name not found, Try again!")
 
     def vm_ip(self):
         for vm, power in self.vm_power.items():
