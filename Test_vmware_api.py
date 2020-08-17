@@ -20,13 +20,18 @@ class vmware_api:
         self.id_vm = {}  # {'SF4992599URC1Q2BIQEBMST35RR9LFVN': 'EVE-COMM-VM.vmx'}
         self.vm_power = {}  # {'EVE-COMM-VM.vmx': {'power_state': 'poweredOn'}}
 
-    def get(self, url):
+    def get(self, url, check):
         """
         A function for GET requests
         """
         response = requests.get(url=url, headers=self.headers, auth=self.user_pass)
-        data = self.check_status_code(response)
-        return data
+        if check == "y":
+            data = self.check_status_code(response)
+            return data
+        elif check == "n":
+            return response.json()
+        else:
+            print(response)
 
     def put(self, url, payload):
         """
@@ -39,6 +44,10 @@ class vmware_api:
         return data
 
     def check_status_code(self, response):
+        """
+        A function to check the status code and print the result
+        for not successful requests
+        """
         if response.status_code == 200:
             return response.json()
         elif response.status_code != 200:
@@ -98,14 +107,16 @@ class vmware_api:
                 break
             else:
                 print("Invalid input, Try Again!")
+                self.login_vmrest()
 
         print("Logging in on VMware Workstation API..")
-        data = requests.get(url=self.api_url, headers=self.headers, auth=self.user_pass)
-        if data.status_code == 200:
+        data = self.get(self.api_url, "n")
+        if type(data) == list:
             print("Login Successfull")
             print("\nChecking available VMs..")
             self.list_vms()
-        elif data.status_code != 200:
+
+        elif type(data) == dict:
             while True:
                 choice = input(
                     'Invalid credentials, Input "yes" to try again, "no" to shutdown the API: '
@@ -116,6 +127,7 @@ class vmware_api:
                     self.vmrest.kill()
                 else:
                     print("Invalid input, Try again!")
+
         else:
             print(data)
 
@@ -127,7 +139,7 @@ class vmware_api:
         self.vm_list.clear()
         self.id_vm.clear()
 
-        data = self.get(self.api_url)
+        data = self.get(self.api_url, "y")
 
         vm_path = [i["path"] for i in data if "path" in i]
         for item in vm_path:
@@ -143,7 +155,7 @@ class vmware_api:
         self.id_vm.update(zip(id_list, self.vm_list))
 
         for key, value in self.id_vm.items():
-            self.vm_power.update({value: self.get(f"{self.api_url}/{key}/power")})
+            self.vm_power.update({value: self.get(f"{self.api_url}/{key}/power", "y")})
 
         print("\n" + "=" * 50)
         print("\nVMware Workstation has the following VMs:")
@@ -153,6 +165,9 @@ class vmware_api:
         self.vm_menu()
 
     def get_vm_id(self, vm_name):
+        """
+        A function to return the vm id number using it's name
+        """
         vm_id = [k for k, v in self.id_vm.items() if v == vm_name]
         return vm_id[0]
 
@@ -194,7 +209,9 @@ class vmware_api:
             self.vm_menu()
 
     def vm_power_on(self):
-
+        """
+        A function to power on a VM
+        """
         while True:
             vm_name = (
                 input("\nEnter the VM name(without .vmx) you want to power on: ")
@@ -204,7 +221,7 @@ class vmware_api:
             for vm in self.vm_list:
                 if search(vm_name, vm, IGNORECASE) is not None:
                     power_url = f"{self.api_url}/{self.get_vm_id(vm_name)}/power"
-                    data = self.get(power_url)
+                    data = self.get(power_url, "y")
 
                     if data["power_state"] == "poweredOff":
                         print(f"Powering On {vm_name}:")
@@ -221,10 +238,12 @@ class vmware_api:
                         print(data1)
 
                 else:
-                    print("VM name not found, Try again!")
+                    print("VM name not found, Try again!", end="\r")
 
     def vm_power_off(self):
-
+        """
+        A function to power off a VM
+        """
         while True:
             vm_name = (
                 input("\nEnter the VM name(without .vmx) you want to power off: ")
@@ -233,7 +252,7 @@ class vmware_api:
             for vm in self.vm_list:
                 if search(vm_name, vm, IGNORECASE) is not None:
                     power_url = f"{self.api_url}/{self.get_vm_id(vm_name)}/power"
-                    data = self.get(power_url)
+                    data = self.get(power_url, "y")
 
                     if data["power_state"] == "poweredOn":
                         print(f"Powering Off {vm_name}:")
@@ -247,13 +266,19 @@ class vmware_api:
                         )
                         self.list_vms()
                 else:
-                    print("VM name not found, Try again!")
+                    print("VM name not found, Try again!", end="\r")
 
     def vm_ip(self):
+        """
+        A function to list the IP address of a powered on VM
+        """
         for vm, power in self.vm_power.items():
             if power["power_state"] == "poweredOn":
-                ip = self.get(f"{self.api_url}/{self.get_vm_id(vm)}/ip")
-                print(f'{vm} IP address: {ip["ip"]}')
+                ip = self.get(f"{self.api_url}/{self.get_vm_id(vm)}/ip", "n")
+                if "Message" in ip.keys():
+                    print(f'{ip["Message"]}, VM is still booting up')
+                elif "ip" in ip.keys():
+                    print(f'{vm} IP address: {ip["ip"]}')
 
             elif power["power_state"] == "poweredOff":
                 print(f"{vm} is currently powered off or still booting up")
