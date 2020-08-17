@@ -28,6 +28,16 @@ class vmware_api:
         data = self.check_status_code(response)
         return data
 
+    def put(self, url, payload):
+        """
+        A function for GET requests
+        """
+        response = requests.put(
+            url=url, headers=self.headers, auth=self.user_pass, data=payload
+        )
+        data = self.check_status_code(response)
+        return data
+
     def check_status_code(self, response):
         if response.status_code == 200:
             return response.json()
@@ -39,16 +49,6 @@ class vmware_api:
         else:
             print(response)
             exit()
-
-    def put(self, url, payload):
-        """
-        A function for GET requests
-        """
-        response = requests.put(
-            url=url, headers=self.headers, auth=self.user_pass, data=payload
-        )
-        data = self.check_status_code(response)
-        return data
 
     def run_vmrest(self):
         """
@@ -145,6 +145,7 @@ class vmware_api:
         for key, value in self.id_vm.items():
             self.vm_power.update({value: self.get(f"{self.api_url}/{key}/power")})
 
+        print("\n" + "=" * 50)
         print("\nVMware Workstation has the following VMs:")
         for vm, power in self.vm_power.items():
             print(f'{vm.split(".vmx")[0]} - {power["power_state"]}')
@@ -210,11 +211,11 @@ class vmware_api:
                         data1 = self.put(power_url, "on")
 
                         print(f'{vm_name} is now {data1["power_state"]}')
-                        self.vm_menu()
+                        self.list_vms()
 
                     elif data["power_state"] == "poweredOn":
                         print(f"{vm_name} is already powered on, returning on the menu")
-                        self.vm_menu()
+                        self.list_vms()
 
                     else:
                         print(data1)
@@ -238,13 +239,13 @@ class vmware_api:
                         print(f"Powering Off {vm_name}:")
                         data1 = self.put(power_url, "off")
                         print(f'{vm_name} is now {data1["power_state"]}')
-                        self.vm_menu()
+                        self.list_vms()
 
                     elif data["power_state"] == "poweredOn":
                         print(
                             f"{vm_name} is already powered off, returning on the menu"
                         )
-                        self.vm_menu()
+                        self.list_vms()
                 else:
                     print("VM name not found, Try again!")
 
