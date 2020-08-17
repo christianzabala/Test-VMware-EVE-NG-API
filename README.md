@@ -12,3 +12,9 @@ My end goal is to complete some To do comments on the scripts and combine the 2 
 ## Will continue to update this doc once the 2 scripts has been combine
 
 Sample script functions:
+![Image1](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/1.jpg)
+![Image2](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/2.jpg)
+![Image3](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/3.jpg)
+![Image4](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/4.jpg)
+![Image5](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/5.jpg)
+![Image6](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/6.jpg)
