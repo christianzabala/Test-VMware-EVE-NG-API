@@ -18,8 +18,12 @@ Sample script functions:
 
 
 Login using default IP, Username, and password set on the script:
+
 $ python Test_EVE-NG.py -d
+
+
 or by specifying it:
+
 $ python Test_EVE-NG.py -ip 192.168.85.128 -user admin -pass eve
 
 ![Image1](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/1.jpg)
