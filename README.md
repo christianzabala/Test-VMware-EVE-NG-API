@@ -13,6 +13,15 @@ My end goal is to complete some To do comments on the scripts and combine the 2 
 
 Sample script functions:
 
+### VMware Workestation script
+Login using default Username, and password set on the script or by specifying it:
+
+![ImageA](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/a.jpg)
+![ImageB](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/b.jpg)
+![ImageC](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/c.jpg)
+
+### EVE-NG Community Edition script
+
 
 ![Image0](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/0.jpg)
 
