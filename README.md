@@ -12,6 +12,12 @@ My end goal is to complete some To do comments on the scripts and combine the 2 
 ## Will continue to update this doc once the 2 scripts has been combine
 
 Sample script functions:
+![Image0](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/0.jpg)
+Login using default IP, Username, and password set on the script:
+$ python Test_EVE-NG.py -d
+or by specifying it:
+$ python Test_EVE-NG.py -ip 192.168.85.128 -user admin -pass eve
+
 ![Image1](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/1.jpg)
 ![Image2](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/2.jpg)
 ![Image3](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/3.jpg)
