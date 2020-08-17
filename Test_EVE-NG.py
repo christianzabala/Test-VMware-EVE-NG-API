@@ -129,7 +129,7 @@ class EVE_API:
             key_value.setdefault(folder, []).append(lab)
 
         for key, value in key_value.items():
-            remove_unl = [n.split(".vmx")[0] for n in value]
+            remove_unl = [n.split(".unl")[0] for n in value]
             print(f'The folder "{key}" has the ff labs:', remove_unl)
 
         self.list_nodes(key_value)
@@ -143,7 +143,6 @@ class EVE_API:
 
         while True:
             name = input("\nEnter the lab name, you want to work on: ") + ".unl"
-
             if any(name in values for values in kv.values()):
                 for key in kv.keys():
                     if name in kv[key]:
@@ -425,7 +424,7 @@ def main():
         "--default",
         action="store_true",
         dest="default",
-        help="Use default Username and Password.",
+        help="Use default Username, Password and IP.",
     )
     parser.add_argument(
         "-ip", "--ip_address", type=str, dest="ip", help="Eve-NG Sever IP Address."
