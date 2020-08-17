@@ -13,7 +13,7 @@ My end goal is to complete some To do comments on the scripts and combine the 2 
 
 Sample script functions:
 
-### VMware Workestation script
+### VMware Workstation player script
 Login using default Username, and password set on the script or by specifying it:
 
 ![ImageA](https://github.com/christianzabala/Test-VMware-EVE-NG-API/blob/master/pics/a.jpg)
